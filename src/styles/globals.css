@@ -1,0 +1,92 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  @font-face {
+    font-family: "montserrat-400";
+    font-style: normal;
+    font-weight: 400;
+    src: url(/fonts/montserrat/Montserrat-Regular.ttf);
+  }
+  @font-face {
+    font-family: "montserrat-500";
+    font-style: normal;
+    font-weight: 500;
+    src: url(/fonts/montserrat/Montserrat-Medium.ttf);
+  }
+  @font-face {
+    font-family: "montserrat-600";
+    font-style: normal;
+    font-weight: 600;
+    src: url(/fonts/montserrat/Montserrat-SemiBold.ttf);
+  }
+  @font-face {
+    font-family: "montserrat-700";
+    font-style: normal;
+    font-weight: 700;
+    src: url(/fonts/montserrat/Montserrat-Bold.ttf);
+  }
+}
+
+@layer base {
+  html {
+    font-family: "montserrat-400", sans-serif;
+    background-color: theme("colors.main");
+    color: theme("colors.main_text");
+  }
+
+  .editor p,
+  .editor h1,
+  .editor h2,
+  .editor h3 {
+    margin-top: 0;
+    margin-bottom: 0;
+    font-size: 14px;
+    color: theme("colors.main_text");
+    font-family: "montserrat-500", sans-serif;
+  }
+}
+
+@layer components {
+  .flex_center {
+    @apply flex items-center justify-center;
+  }
+  .flex_jb_ic {
+    @apply flex items-center justify-between;
+  }
+  .flex_col {
+    @apply flex flex-col;
+  }
+  .flex_col_ic {
+    @apply flex flex-col items-center;
+  }
+
+  .fadeIn {
+    animation: fadeIn 0.5s ease-out forwards;
+  }
+  .fadeOut {
+    animation: fadeOut 0.5s ease-out forwards;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+    transform: translateY(0px);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+}

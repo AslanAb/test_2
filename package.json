@@ -1,0 +1,43 @@
+{
+  "name": "my-app",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@nextui-org/react": "^2.4.2",
+    "@react-input/mask": "^1.2.5",
+    "@tanstack/react-query": "^5.49.2",
+    "@tanstack/react-query-devtools": "^5.50.1",
+    "@tiptap/extension-underline": "^2.4.0",
+    "@tiptap/pm": "^2.4.0",
+    "@tiptap/react": "^2.4.0",
+    "@tiptap/starter-kit": "^2.4.0",
+    "@types/js-cookie": "^3.0.6",
+    "axios": "^1.7.2",
+    "framer-motion": "^11.2.12",
+    "js-cookie": "^3.0.5",
+    "next": "14.2.4",
+    "nookies": "^2.5.2",
+    "react": "^18",
+    "react-dom": "^18",
+    "react-hook-form": "^7.52.0",
+    "react-icons": "^5.2.1",
+    "react-photo-album": "^2.4.1",
+    "react-spinners": "^0.14.1",
+    "react-toastify": "^10.0.5"
+  },
+  "devDependencies": {
+    "@tailwindcss/typography": "^0.5.13",
+    "@types/node": "^20",
+    "@types/react": "^18",
+    "@types/react-dom": "^18",
+    "postcss": "^8",
+    "tailwindcss": "^3.4.1",
+    "typescript": "^5"
+  }
+}
