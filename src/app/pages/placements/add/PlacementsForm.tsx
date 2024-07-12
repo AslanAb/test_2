@@ -4,7 +4,14 @@ import InputUI from "@/app/components/InputUI";
 import SelectUI from "@/app/components/SelectUI";
 import Tiptap from "@/app/components/Tiptap";
 import { stars } from "@/app/constants";
-import { useAddPlacements, useFoodTypes, usePlacementTypes, useRegions, useServiceTypes, useUploadFiles } from "@/app/hooks/placements";
+import {
+  useAddPlacements,
+  useFoodTypes,
+  usePlacementTypes,
+  useRegions,
+  useServiceTypes,
+  useUploadFiles,
+} from "@/app/hooks/placements";
 import { IFormPlacement } from "@/app/types/auth";
 import { useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/router";
@@ -17,6 +24,7 @@ export default function PlacementsForm() {
     handleSubmit,
     resetField,
     control,
+    getValues,
     formState: { errors },
   } = useForm<IFormPlacement>({
     defaultValues: {
@@ -73,7 +81,12 @@ export default function PlacementsForm() {
 
   useEffect(() => {
     if (addPlacement.isSuccess) {
-      toast.update("addPlacement", { render: "Успешно добавлено место размещения", type: "success", isLoading: false, autoClose: 3000 });
+      toast.update("addPlacement", {
+        render: "Успешно добавлено место размещения",
+        type: "success",
+        isLoading: false,
+        autoClose: 3000,
+      });
       queryClient.invalidateQueries({ queryKey: ["listOfPlacements"] });
       router.push("/placements");
     }
@@ -105,6 +118,7 @@ export default function PlacementsForm() {
   const serviceTypes = allServiceTypes.data?.data.map((type: any) => ({ value: type.id, label: type.title }));
 
   const onSubmit = (data: any) => {
+    console.log('data: ', data);
     setPayload({
       city_id: +data.city_id[0],
       placement_type_id: +data.placement_type_id[0],
@@ -122,12 +136,14 @@ export default function PlacementsForm() {
       },
       en: {
         title: data.en_title ? data.en_title : data.ru_title,
-        description: data.en_description ? data.en_description : data.ru_description,
+        description:
+          data.en_description && data.en_description !== "<p></p>" ? data.en_description : data.ru_description,
         address: data.en_address ? data.en_address : data.ru_address,
       },
       kz: {
         title: data.kz_title ? data.kz_title : data.ru_title,
-        description: data.kz_description ? data.kz_description : data.ru_description,
+        description:
+          data.kz_description && data.kz_description !== "<p></p>" ? data.kz_description : data.ru_description,
         address: data.kz_address ? data.kz_address : data.ru_address,
       },
     });
@@ -139,22 +155,58 @@ export default function PlacementsForm() {
     upload.mutate(formData);
   };
 
+  const validateNotEmptyStringInArray = (value: any) => {
+    if (Array.isArray(value) && value.length === 1 && value.includes("")) {
+      return false;
+    }
+    return true;
+  };
+
+  console.log("getValues: ", getValues("en_description"));
+
   return (
     <main className="mx-[47px] my-[40px] p-[20px] bg-white rounded-[5px] border border-[#F3F6F9] shadow-sm ">
       <p className=" font-montserrat-600 text-[20px] text-main_text mb-[10px]">Добавление отеля</p>
       <form className="flex flex-col gap-[10px] " onSubmit={handleSubmit(onSubmit)}>
-        <SelectUI data={placementTypes} label="Тип размещения" name="placement_type_id" control={control} rules={{ required: true }} />
-        {errors.placement_type_id && <span className="mx-auto text-red-500 font-montserrat-500 text-[14px]">Обязательное поле</span>}
+        <SelectUI
+          data={placementTypes}
+          label="Тип размещения"
+          name="placement_type_id"
+          control={control}
+          rules={{ required: true, validate: validateNotEmptyStringInArray }}
+        />
+        {errors.placement_type_id && (
+          <span className="mx-auto text-red-500 font-montserrat-500 text-[14px]">Обязательное поле</span>
+        )}
         <InputUI label="Наименование на русском" name="ru_title" control={control} rules={{ required: true }} />
-        {errors.ru_title && <span className="mx-auto text-red-500 font-montserrat-500 text-[14px]">Обязательное поле</span>}
+        {errors.ru_title && (
+          <span className="mx-auto text-red-500 font-montserrat-500 text-[14px]">Обязательное поле</span>
+        )}
         <InputUI label="Наименование на казахском" name="kz_title" control={control} rules={{ required: false }} />
         <InputUI label="Наименование на английском" name="en_title" control={control} rules={{ required: false }} />
-        <Tiptap label="Описание на русском" name="ru_description" control={control} rules={{ required: true }} />
-        {errors.ru_description && <span className="mx-auto text-red-500 font-montserrat-500 text-[14px]">Обязательное поле</span>}
+        <Tiptap
+          label="Описание на русском"
+          name="ru_description"
+          control={control}
+          rules={{
+            required: true,
+            validate: (value: string) => {
+              if (value.trim() === "<p></p>") {
+                return false;
+              }
+              return true;
+            },
+          }}
+        />
+        {errors.ru_description && (
+          <span className="mx-auto text-red-500 font-montserrat-500 text-[14px]">Обязательное поле</span>
+        )}
         <Tiptap label="Описание на казахском" name="kz_description" control={control} rules={{ required: false }} />
         <Tiptap label="Описание на английском" name="en_description" control={control} rules={{ required: false }} />
         <InputUI label="Адрес на русском" name="ru_address" control={control} rules={{ required: true }} />
-        {errors.ru_address && <span className="mx-auto text-red-500 font-montserrat-500 text-[14px]">Обязательное поле</span>}
+        {errors.ru_address && (
+          <span className="mx-auto text-red-500 font-montserrat-500 text-[14px]">Обязательное поле</span>
+        )}
         <InputUI label="Адрес на казахском" name="kz_address" control={control} rules={{ required: false }} />
         <InputUI label="Адрес на английском" name="en_address" control={control} rules={{ required: false }} />
         <InputUI
@@ -170,21 +222,42 @@ export default function PlacementsForm() {
           }}
         />
         {errors.lat_lon && (
-          <span className="mx-auto text-red-500 font-montserrat-500 text-[14px]">{errors.lat_lon?.message as string}</span>
+          <span className="mx-auto text-red-500 font-montserrat-500 text-[14px]">
+            {errors.lat_lon?.message as string}
+          </span>
         )}
-        <SelectUI data={stars} label="Количество звезд" name="rating" control={control} rules={{ required: true }} />
-        {errors.rating && <span className="mx-auto text-red-500 font-montserrat-500 text-[14px]">Обязательное поле</span>}
-        <SelectUI data={regions} label="Область" name="region" control={control} rules={{ required: true }} onChange={setRegionId} />
-        {errors.region && <span className="mx-auto text-red-500 font-montserrat-500 text-[14px]">Обязательное поле</span>}
+        <SelectUI
+          data={stars}
+          label="Количество звезд"
+          name="rating"
+          control={control}
+          rules={{ required: true, validate: validateNotEmptyStringInArray }}
+        />
+        {errors.rating && (
+          <span className="mx-auto text-red-500 font-montserrat-500 text-[14px]">Обязательное поле</span>
+        )}
+        <SelectUI
+          data={regions}
+          label="Область"
+          name="region"
+          control={control}
+          rules={{ required: true, validate: validateNotEmptyStringInArray }}
+          onChange={setRegionId}
+        />
+        {errors.region && (
+          <span className="mx-auto text-red-500 font-montserrat-500 text-[14px]">Обязательное поле</span>
+        )}
         <SelectUI
           data={cities ? cities : []}
           label="Город"
           name="city_id"
           control={control}
-          rules={{ required: true }}
+          rules={{ required: true, validate: validateNotEmptyStringInArray }}
           disabled={cities ? false : true}
         />
-        {errors.city_id && <span className="mx-auto text-red-500 font-montserrat-500 text-[14px]">Обязательное поле</span>}
+        {errors.city_id && (
+          <span className="mx-auto text-red-500 font-montserrat-500 text-[14px]">Обязательное поле</span>
+        )}
         <InputUI
           label="Email"
           name="email"
@@ -197,7 +270,11 @@ export default function PlacementsForm() {
             },
           }}
         />
-        {errors.email && <span className="mx-auto text-red-500 font-montserrat-500 text-[14px]">{errors.email?.message as string}</span>}
+        {errors.email && (
+          <span className="mx-auto text-red-500 font-montserrat-500 text-[14px]">
+            {errors.email?.message as string}
+          </span>
+        )}
         <InputMaskedUI
           label="Телефон для бронирования"
           name="phone"
@@ -211,13 +288,37 @@ export default function PlacementsForm() {
           }}
           mask={{ mask: "+7 (___) ___ __ __", replacement: "_", showMask: true, separate: true }}
         />
-        {errors.phone && <span className="mx-auto text-red-500 font-montserrat-500 text-[14px]">{errors.phone?.message as string}</span>}
-        <SelectUI data={foodTypes} label="Вид питания" name="foods" control={control} rules={{ required: true }} multipleSelect />
-        {errors.foods && <span className="mx-auto text-red-500 font-montserrat-500 text-[14px]">Обязательное поле</span>}
-        <SelectUI data={serviceTypes} label="Услуги" name="services" control={control} rules={{ required: true }} multipleSelect />
-        {errors.services && <span className="mx-auto text-red-500 font-montserrat-500 text-[14px]">Обязательное поле</span>}
+        {errors.phone && (
+          <span className="mx-auto text-red-500 font-montserrat-500 text-[14px]">
+            {errors.phone?.message as string}
+          </span>
+        )}
+        <SelectUI
+          data={foodTypes}
+          label="Вид питания"
+          name="foods"
+          control={control}
+          rules={{ required: true, validate: validateNotEmptyStringInArray }}
+          multipleSelect
+        />
+        {errors.foods && (
+          <span className="mx-auto text-red-500 font-montserrat-500 text-[14px]">Обязательное поле</span>
+        )}
+        <SelectUI
+          data={serviceTypes}
+          label="Услуги"
+          name="services"
+          control={control}
+          rules={{ required: true, validate: validateNotEmptyStringInArray }}
+          multipleSelect
+        />
+        {errors.services && (
+          <span className="mx-auto text-red-500 font-montserrat-500 text-[14px]">Обязательное поле</span>
+        )}
         <InputFilesUI label="Галерея" name="gallery_images" control={control} rules={{ required: true }} />
-        {errors.gallery_images && <span className="mx-auto text-red-500 font-montserrat-500 text-[14px]">Обязательное поле</span>}
+        {errors.gallery_images && (
+          <span className="mx-auto text-red-500 font-montserrat-500 text-[14px]">Обязательное поле</span>
+        )}
         <button
           type="submit"
           className="ml-[25%] mb-[30px] w-fit rounded-[8px] bg-main_blue flex items-center px-[4px] py-[8px] gap-[6px] text-[14px] text-white font-montserrat-500"
