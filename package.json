@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@emotion/react": "^11.11.4",
     "@nextui-org/react": "^2.4.2",
     "@react-input/mask": "^1.2.5",
     "@tanstack/react-query": "^5.49.2",
@@ -27,6 +28,7 @@
     "react-dom": "^18",
     "react-hook-form": "^7.52.0",
     "react-icons": "^5.2.1",
+    "react-loader-spinner": "^6.1.6",
     "react-photo-album": "^2.4.1",
     "react-spinners": "^0.14.1",
     "react-toastify": "^10.0.5"

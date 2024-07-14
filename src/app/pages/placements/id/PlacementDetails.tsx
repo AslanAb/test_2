@@ -12,14 +12,14 @@ export default function PlacementDetails(props: { id: string }) {
   return (
     <main className="mx-[47px] my-[40px] p-[20px] bg-white rounded-[5px] border border-[#F3F6F9] shadow-sm flex gap-[40px]">
       <div className="w-[35%]">
-        <img src={selectedImg} alt="placement photo" className="w-full aspect-square mb-[10px]" />
+        <img src={selectedImg} alt="placement photo" className="w-full aspect-square mb-[10px] object-cover" />
         <div className="flex gap-[15px] overflow-x-auto pb-[10px]">
           {data.data.gallery_images.map((el: any) => (
             <img
               key={el.id}
               src={el.path}
               alt="placement photo"
-              className="w-[20%] aspect-square cursor-pointer"
+              className="w-[20%] aspect-square cursor-pointer object-cover"
               onClick={() => setSelectedImg(el.path)}
             />
           ))}

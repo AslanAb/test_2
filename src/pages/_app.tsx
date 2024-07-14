@@ -6,6 +6,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer } from "react-toastify";
 import { useState } from "react";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import { LoadingContext, useLoading } from "@/app/utils/loading_context";
 
 export default function App({ Component, pageProps }: AppProps) {
   const [queryClient] = useState(
@@ -20,14 +21,16 @@ export default function App({ Component, pageProps }: AppProps) {
   );
 
   return (
-    <NextUIProvider>
-      <QueryClientProvider client={queryClient}>
-        <HydrationBoundary state={pageProps.dehydratedState}>
-          <Component {...pageProps} />
-          <ToastContainer position="bottom-right" />
-          <ReactQueryDevtools initialIsOpen={false} />
-        </HydrationBoundary>
-      </QueryClientProvider>
-    </NextUIProvider>
+    <LoadingContext.Provider value={useLoading()}>
+      <NextUIProvider>
+        <QueryClientProvider client={queryClient}>
+          <HydrationBoundary state={pageProps.dehydratedState}>
+            <Component {...pageProps} />
+            <ToastContainer position="bottom-right" />
+            <ReactQueryDevtools initialIsOpen={false} />
+          </HydrationBoundary>
+        </QueryClientProvider>
+      </NextUIProvider>
+    </LoadingContext.Provider>
   );
 }

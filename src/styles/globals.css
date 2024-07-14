@@ -46,6 +46,7 @@
     font-size: 14px;
     color: theme("colors.main_text");
     font-family: "montserrat-500", sans-serif;
+    text-wrap: wrap;
   }
   .editor li::marker {
     font-size: 16px;
