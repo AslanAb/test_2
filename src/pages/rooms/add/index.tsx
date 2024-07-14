@@ -1,34 +1,38 @@
 import HeaderOfComponent from "@/app/components/HeaderOfComponent";
 import Wrapper from "@/app/components/Wrapper";
-import PlacementDetails from "@/app/pages/placements/id/PlacementDetails";
+import RoomsForm from "@/app/pages/rooms/add/RoomsForm";
 import { PlacementsServices } from "@/app/services/placements";
+import { RoomsServices } from "@/app/services/rooms";
 import { QueryClient, dehydrate } from "@tanstack/react-query";
 import { GetServerSidePropsContext } from "next";
-import { useRouter } from "next/router";
 import { parseCookies } from "nookies";
 
-export default function PlacementsById() {
-  const router = useRouter();
-  const id = router.query.id as string;
+export default function AddRoom() {
   return (
     <Wrapper>
-      <HeaderOfComponent title="Места размещения" addPath="/placements/add" isBack backPath="/placements" />
-      <PlacementDetails id={id} />
+      <HeaderOfComponent title="Номера" addPath="/rooms/add" isBack backPath="/rooms" />
+      <RoomsForm />
     </Wrapper>
   );
 }
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
-  const id = context.query.id as string;
-
   const { req } = context;
   const cookies = parseCookies({ req });
   const token = cookies["token"];
   const queryClient = new QueryClient();
   try {
     await queryClient.fetchQuery({
-      queryKey: ["placementById", id + "_ru"],
-      queryFn: () => PlacementsServices.getPlacementById(id, "ru", token),
+      queryKey: ["room_types"],
+      queryFn: () => RoomsServices.getRoomTypes(token),
+    });
+    await queryClient.fetchQuery({
+      queryKey: ["food_types"],
+      queryFn: () => PlacementsServices.getFoodTypes(token),
+    });
+    await queryClient.fetchQuery({
+      queryKey: ["cancellation_conditions"],
+      queryFn: () => RoomsServices.getCancellationConditions(token),
     });
     return {
       props: { dehydratedState: dehydrate(queryClient) },

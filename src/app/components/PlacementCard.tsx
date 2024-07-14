@@ -24,24 +24,24 @@ export default function PlacementCard(props: { placement: any }) {
 
   return (
     <div className="h-[100px] px-[40px] flex_jb_ic bg-white shadow-sm rounded-[8px] shadow-gray-300 mb-[20px]">
-      <div className="flex gap-[40px] overflow-hidden">
-        <div className="flex_col max-w-[20%] ">
+      <div className="w-[80%] flex gap-[40px] ">
+        <div className="flex_col w-[20%] ">
           <span className=" text-[11px] font-montserrat-500">Название</span>
           <span className=" text-[14px] font-montserrat-600 truncate">{props.placement.title}</span>
         </div>
-        <div className="flex_col max-w-[20%] ">
+        <div className="flex_col w-[15%] ">
           <span className=" text-[11px] font-montserrat-500">Тип размещения</span>
           <span className=" text-[14px] font-montserrat-600 truncate">{props.placement.placement_type.title}</span>
         </div>
-        <div className="flex_col max-w-[20%] ">
+        <div className="flex_col w-[10%] ">
           <span className=" text-[11px] font-montserrat-500">Город</span>
           <span className=" text-[14px] font-montserrat-600 truncate">{props.placement.city.title}</span>
         </div>
-        <div className="flex_col max-w-[20%]">
+        <div className="flex_col w-[20%]">
           <span className=" text-[11px] font-montserrat-500 ">Адрес</span>
           <span className=" text-[14px] font-montserrat-600 truncate">{props.placement.address}</span>
         </div>
-        <div className="flex_col max-w-[20%] ">
+        <div className="flex_col w-[20%] ">
           <span className=" text-[11px] font-montserrat-500 ">Контакты</span>
           <span className=" text-[14px] font-montserrat-600 truncate">{props.placement.phone}</span>
         </div>

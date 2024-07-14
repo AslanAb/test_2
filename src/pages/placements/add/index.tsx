@@ -1,5 +1,5 @@
+import HeaderOfComponent from "@/app/components/HeaderOfComponent";
 import Wrapper from "@/app/components/Wrapper";
-import HeaderOfPlacements from "@/app/pages/placements/add/HeaderOfPlacements";
 import PlacementsForm from "@/app/pages/placements/add/PlacementsForm";
 import { PlacementsServices } from "@/app/services/placements";
 import { QueryClient, dehydrate } from "@tanstack/react-query";
@@ -9,7 +9,7 @@ import { parseCookies } from "nookies";
 export default function AddPlacement() {
   return (
     <Wrapper>
-      <HeaderOfPlacements />
+      <HeaderOfComponent title="Места размещения" addPath="/placements/add" isBack backPath="/placements" />
       <PlacementsForm />
     </Wrapper>
   );

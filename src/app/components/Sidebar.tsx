@@ -2,24 +2,26 @@ import { BiLogOut } from "react-icons/bi";
 import { TbEdit } from "react-icons/tb";
 import Image from "next/image";
 import { FaChevronDown, FaChevronUp } from "react-icons/fa6";
-import { useState } from "react";
+import { use, useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { useLogout } from "../hooks/auth";
 
 export default function Sidebar() {
   const [isVisible, setIsVisible] = useState(true);
+  const [pageName, setPageName] = useState("placements");
+
   const router = useRouter();
+
+  useEffect(() => {
+    if (router.pathname.startsWith("/placements")) {
+      setPageName("placements");
+    } else if (router.pathname.startsWith("/rooms")) {
+      setPageName("rooms");
+    }
+  }, [router.pathname]);
 
   const visibleHandler = () => {
     setIsVisible(!isVisible);
-  };
-
-  const routerName = (name: string) => {
-    if (router.pathname.startsWith(name)) {
-      return true;
-    } else {
-      return false;
-    }
   };
 
   const logout = useLogout();
@@ -57,18 +59,38 @@ export default function Sidebar() {
         </div>
         {isVisible && (
           <div className={`flex_col pl-[31px] duration-300 fadeIn`}>
-            <span
-              className="hover:bg-[#F3F6F9] hover:translate-x-2 duration-300 py-[6px] px-[4px] rounded-[5px] cursor-pointer"
+            <button
+              className="hover:bg-[#F3F6F9] hover:translate-x-2 duration-300 py-[6px] px-[4px] rounded-[5px] cursor-pointer text-start"
               style={{
-                backgroundColor: (() => routerName("placements")) ? "#F3F6F9" : "",
-                transform: (() => routerName("placements")) ? "translateX(0.5rem)" : "",
+                backgroundColor: pageName === "placements" ? "#F3F6F9" : "",
+                transform: pageName === "placements" ? "translateX(0.5rem)" : "",
+              }}
+              onClick={() => {
+                setPageName("placements");
+                router.push("/placements");
               }}
             >
               Места размещения
+            </button>
+            <button
+              className="hover:bg-[#F3F6F9] hover:translate-x-2 duration-300 py-[6px] px-[4px] rounded-[5px] cursor-pointer text-start"
+              style={{
+                backgroundColor: pageName === "rooms" ? "#F3F6F9" : "",
+                transform: pageName === "rooms" ? "translateX(0.5rem)" : "",
+              }}
+              onClick={() => {
+                setPageName("rooms");
+                router.push("/rooms");
+              }}
+            >
+              Номера
+            </button>
+            <span className="hover:bg-[#F3F6F9] hover:translate-x-2 duration-300 py-[6px] px-[4px] rounded-[5px] cursor-pointer">
+              Тарифы
             </span>
-            <span className="hover:bg-[#F3F6F9] hover:translate-x-2 duration-300 py-[6px] px-[4px] rounded-[5px] cursor-pointer">Номера</span>
-            <span className="hover:bg-[#F3F6F9] hover:translate-x-2 duration-300 py-[6px] px-[4px] rounded-[5px] cursor-pointer">Тарифы</span>
-            <span className="hover:bg-[#F3F6F9] hover:translate-x-2 duration-300 py-[6px] px-[4px] rounded-[5px] cursor-pointer">Цены и предложения</span>
+            <span className="hover:bg-[#F3F6F9] hover:translate-x-2 duration-300 py-[6px] px-[4px] rounded-[5px] cursor-pointer">
+              Цены и предложения
+            </span>
           </div>
         )}
         <div className="pt-[10px] flex_jb_ic">

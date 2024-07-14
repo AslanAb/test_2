@@ -10,7 +10,7 @@ export default function Wrapper(props: { children: ReactNode }) {
     <div className="min-h-screen flex bg-[#F9F9F9]">
       <Sidebar />
       {isLoading ? (
-        <div className="w-full flex justify-center mt-[180px]">
+        <div className="flex-1 flex justify-center mt-[180px]">
           <ThreeDots
             visible={true}
             height="80"

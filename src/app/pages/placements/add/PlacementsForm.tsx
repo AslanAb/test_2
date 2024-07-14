@@ -12,7 +12,7 @@ import {
   useServiceTypes,
   useUploadFiles,
 } from "@/app/hooks/placements";
-import { IFormPlacement } from "@/app/types/auth";
+import { IFormPlacement } from "@/app/types/placements";
 import { useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";

@@ -3,11 +3,11 @@ import { PlacementsServices } from "../services/placements";
 import { toast } from "react-toastify";
 
 export function usePlacements() {
-  const { data, isError, isFetching, isSuccess } = useQuery({
+  const { data } = useQuery({
     queryKey: ["listOfPlacements"],
     queryFn: () => PlacementsServices.getPlacements(),
   });
-  return { data, isError, isFetching, isSuccess };
+  return { data };
 }
 
 export function usePlacementTypes() {
